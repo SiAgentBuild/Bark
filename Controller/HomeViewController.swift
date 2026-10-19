@@ -118,13 +118,12 @@ class HomeViewController: BaseViewController<HomeViewModel> {
         let server = ServerManager.shared.currentServer
         let hasKey = !server.key.isEmpty
 
-        let menuItems: [(title: String, icon: String, action: () -> Void)] = [
+        let copyItems: [(title: String, icon: String, action: () -> Void)] = [
             ("copyAddressAndKey".localized, "link", { [weak self] in self?.copyAddressAndKey() }),
-            ("copyKey".localized, "key", { [weak self] in self?.copyKey() }),
-            ("showQRCode".localized, "qrcode", { [weak self] in self?.showQRCode() })
+            ("copyKey".localized, "key", { [weak self] in self?.copyKey() })
         ]
 
-        exampleCard.copyButton.menu = UIMenu(children: menuItems.map { item in
+        exampleCard.copyButton.menu = UIMenu(children: copyItems.map { item in
             UIAction(
                 title: item.title,
                 image: UIImage(systemName: item.icon),
@@ -135,7 +134,7 @@ class HomeViewController: BaseViewController<HomeViewModel> {
         })
 
         // 按钮是单一无障碍元素，菜单项用自定义动作暴露
-        exampleCard.copyButton.accessibilityCustomActions = hasKey ? menuItems.map { item in
+        exampleCard.copyButton.accessibilityCustomActions = hasKey ? copyItems.map { item in
             UIAccessibilityCustomAction(name: item.title) { _ in
                 item.action()
                 return true
@@ -234,10 +233,6 @@ class HomeViewController: BaseViewController<HomeViewModel> {
 
     private func copyKey() {
         copyToClipboard(ServerManager.shared.currentServer.key)
-    }
-
-    private func showQRCode() {
-        presentInNavigation(PushQRCodeViewController())
     }
 
     @objc private func testExample() {
